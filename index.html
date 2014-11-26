@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+
+  <link rel="stylesheet" type="text/css" href="bootstrap.css">
+
+  <script type="text/javascript" src="jquery.js"></script>
+  <script type="text/javascript" src="html2canvas.js"></script>
+  <script type="text/javascript" src="bootstrap.min.js"></script>
+
+  <style type="text/css">
+    body{
+      background-color: #E4E4E4
+    }
+    #editor{
+      background-color: #fff;
+      width: 450px;
+      height: 450px;
+    }
+    #background_list_slider{
+      width: 100px;
+      height: 300px;
+      overflow: auto;
+    }
+    #upload_background{
+      margin-bottom: 10px; 
+    }
+    .background-image{
+      width:80px;    
+      margin-bottom: 5px;
+    }
+
+    .background-side{
+      width: 90px;
+    }
+    .hero-unit{
+      padding: 0px !important;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="row">
+
+    <div class="col-md-2">
+      <div id="background_list_slider">
+        <a href="javascript:void(0);" class="thumbnail background-image" id="https://scontent-a-sin.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/149017_582700025074943_1000263845_n.jpg?oh=ed1af5d3ec00548bc84c6f3ebd8e15ff&oe=54DD6045">
+          <img src="https://scontent-a-sin.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/149017_582700025074943_1000263845_n.jpg?oh=ed1af5d3ec00548bc84c6f3ebd8e15ff&oe=54DD6045" class="background_image_thumbnail" style="width:70px;height:70px">
+        </a>  
+        <div class="clearfix"></div>
+        <a href="javascript:void(0);" class="thumbnail background-image" id="https://scontent-b-sin.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/548735_505459716132308_1035379900_n.jpg?oh=e9646bea2465948f9fe76a835427e0c6&oe=5517FF58">    
+          <img src="https://scontent-b-sin.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/548735_505459716132308_1035379900_n.jpg?oh=e9646bea2465948f9fe76a835427e0c6&oe=5517FF58" class="background_image_thumbnail" style="width:70px;height:70px">
+        </a>
+          
+      </div>
+      <div class="clearfix"></div>
+      <p>click the image to get the background image and then try to create image :)</p>
+      <a class="btn-primary pull-right" id="create-image" >Create Image</a>
+      <div class="clearfix"></div>
+      <p>image result in below!</p>
+    </div>
+
+    <div class="col-md-8">
+      <div id="editor">
+        <div style="text-align: center;">Text in Here</div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    $(document).on('click', '.background-image', function(e) {      
+      var image_link = this.id
+
+      $("#editor").css({ 'background' : "url("+image_link+")", 'background-size' : 'cover', 'background-repeat' : 'no-repeat' })
+
+      var image = new Image();
+      image.src = image_link;
+      var width = image.width;
+      var height = image.height;
+      var fit_height = 450 * height / width
+
+      $("#editor").css({ 'height' : fit_height + "px"})
+    });
+
+    $(document).on('click', '#create-image', function(e) { 
+      html2canvas($("#editor"), {
+        onrendered: function(canvas) {
+          document.body.appendChild(canvas);
+        }
+      });
+    });
+
+    
+
+  </script>
+
+</body>
+</html>
