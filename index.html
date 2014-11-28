@@ -4,10 +4,15 @@
   <title></title>
 
   <link rel="stylesheet" type="text/css" href="bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bweditor.css">
+  <link rel="stylesheet" type="text/css" href="bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 
   <script type="text/javascript" src="jquery.js"></script>
-  <script type="text/javascript" src="html2canvas.js"></script>
   <script type="text/javascript" src="bootstrap.min.js"></script>
+  <script type="text/javascript" src="html2canvas.js"></script>
+  <script type="text/javascript" src="bootstrap-wysiwyg-color.js"></script>
+  
 
   <style type="text/css">
     body{
@@ -42,10 +47,47 @@
 </head>
 <body>
 
+  <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+    <div class="btn-group">
+      <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="icon-font"></i><b class="caret"></b></a>
+      <ul class="dropdown-menu">
+      </ul>
+    </div>
+    <div class="btn-group">
+      <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        
+        <li><a data-edit="fontSize <%= size %>"><font size="1">1</font></a></li>
+        <li><a data-edit="fontSize <%= size %>"><font size="3">3</font></a></li>
+        <li><a data-edit="fontSize <%= size %>"><font size="5">5</font></a></li>
+        
+      </ul>
+    </div>
+
+
+    <a class="input-append colorpickerFR add-on btn" data-edit="foreColor #000" data-color="rgb(255, 146, 180)" data-color-format="rgb" title="Color"><b>C</b></a>
+    <div class="btn-group">
+
+      <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+      <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+      <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></a>
+      <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+    </div>
+
+    <div class="btn-group">
+      <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
+      <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
+      <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
+      <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
+    </div>
+
+  </div>
+
   <div class="row">
 
     <div class="col-md-2">
       <div id="background_list_slider">
+      <!-- 
         <a href="javascript:void(0);" class="thumbnail background-image" id="https://scontent-a-sin.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/149017_582700025074943_1000263845_n.jpg?oh=ed1af5d3ec00548bc84c6f3ebd8e15ff&oe=54DD6045">
           <img src="https://scontent-a-sin.xx.fbcdn.net/hphotos-xaf1/v/t1.0-9/149017_582700025074943_1000263845_n.jpg?oh=ed1af5d3ec00548bc84c6f3ebd8e15ff&oe=54DD6045" class="background_image_thumbnail" style="width:70px;height:70px">
         </a>  
@@ -53,7 +95,18 @@
         <a href="javascript:void(0);" class="thumbnail background-image" id="https://scontent-b-sin.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/548735_505459716132308_1035379900_n.jpg?oh=e9646bea2465948f9fe76a835427e0c6&oe=5517FF58">    
           <img src="https://scontent-b-sin.xx.fbcdn.net/hphotos-xfa1/v/t1.0-9/548735_505459716132308_1035379900_n.jpg?oh=e9646bea2465948f9fe76a835427e0c6&oe=5517FF58" class="background_image_thumbnail" style="width:70px;height:70px">
         </a>
-          
+ -->
+
+        <div class="clearfix"></div>
+        <a href="javascript:void(0);" class="thumbnail background-image" id="colorful-triangles-background.jpg">    
+          <img src="colorful-triangles-background.jpg" class="background_image_thumbnail" style="width:70px;height:70px">
+        </a>
+        <div class="clearfix"></div>
+        <a href="javascript:void(0);" class="thumbnail background-image" id="ghost.jpg">    
+          <img src="ghost.jpg" class="background_image_thumbnail" style="width:70px;height:70px">
+        </a>        
+        
+
       </div>
       <div class="clearfix"></div>
       <p>click the image to get the background image and then try to create image :)</p>
@@ -64,12 +117,68 @@
 
     <div class="col-md-8">
       <div id="editor">
-        <div style="text-align: center;">Text in Here</div>
+        Go ahead&hellip;
       </div>
 
     </div>
 
   </div>
+
+
+<script>
+
+  $(function(){ 
+   $('.colorpickerFR').colorpicker().on('changeColor', function(e){
+     $(this).attr("data-edit", "foreColor "+e.color.toHex());
+     $(this).css({ "color" : e.color.toHex() });
+     document.execCommand("foreColor", 0, e.color.toHex());
+   });  
+   $('.colorpickerBG').colorpicker().on('changeColor', function(e){
+     $(this).attr("data-edit", "backColor "+e.color.toHex());
+     document.execCommand("backColor", 0, e.color.toHex());
+   });  
+   function initToolbarBootstrapBindings() {
+     var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 
+
+     'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+     'Times New Roman', 'Verdana'],
+     fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+     $.each(fonts, function (idx, fontName) {
+      fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
+    });
+     $('a[title]').tooltip({container:'body'});
+     $('.dropdown-menu input').click(function() {return false;})
+     .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
+     .keydown('esc', function () {this.value='';$(this).change();});
+
+     $('[data-role=magic-overlay]').each(function () { 
+      var overlay = $(this), target = $(overlay.data('target')); 
+      overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+    });
+     if ("onwebkitspeechchange"  in document.createElement("input")) {
+      var editorOffset = $('#editor').offset();
+
+      $('#voiceBtn').css('position','absolute').offset({top: editorOffset.top, left: editorOffset.left+$('#editor').innerWidth()-55});
+
+    } else {
+      $('#voiceBtn').hide();
+    }
+  };
+  function showErrorAlert (reason, detail) {
+    var msg='';
+    if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
+    else {
+     console.log("error uploading file", reason, detail);
+   }
+   $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>'+ 
+     '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
+ };
+ initToolbarBootstrapBindings();  
+ $('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
+ window.prettyPrint && prettyPrint();
+});
+</script>
+
 
 
   <script>
